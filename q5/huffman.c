@@ -80,6 +80,25 @@ void free_tree(HuffNode *root) {
     free(root);
 }
 
+HuffNode *build_huffman_tree(MinHeap *heap) {
+    if (heap->size == 0) return NULL;
+    while (heap->size > 1) {
+        HuffNode *l = heap_pop(heap);
+        HuffNode *r = heap_pop(heap);
+        HuffNode *parent = new_node(0, l->freq + r->freq);
+        parent->left = l;
+        parent->right = r;
+        heap_push(heap, parent);
+    }
+    HuffNode *root = heap_pop(heap);
+    if (root && !root->left && !root->right) {
+        HuffNode *parent = new_node(0, root->freq);
+        parent->left = root;
+        root = parent;
+    }
+    return root;
+}
+
 void write_bits(FILE *f, const char *bits, unsigned char *buf, int *bit_pos) {
     for (int i = 0; bits[i]; i++) {
         if (bits[i] == '1')
@@ -109,15 +128,7 @@ int compress(const char *infile) {
     for (int i = 0; i < MAX_CHAR; i++)
         if (freq[i]) heap_push(&heap, new_node((unsigned char)i, freq[i]));
 
-    while (heap.size > 1) {
-        HuffNode *l = heap_pop(&heap);
-        HuffNode *r = heap_pop(&heap);
-        HuffNode *parent = new_node(0, l->freq + r->freq);
-        parent->left = l; parent->right = r;
-        heap_push(&heap, parent);
-    }
-
-    HuffNode *root = heap_pop(&heap);
+    HuffNode *root = build_huffman_tree(&heap);
     memset(codes, 0, sizeof(codes));
     char buf[MAX_CHAR];
     build_codes(root, buf, 0);
@@ -162,15 +173,7 @@ int decompress() {
     for (int i = 0; i < MAX_CHAR; i++)
         if (freq[i]) heap_push(&heap, new_node((unsigned char)i, freq[i]));
 
-    while (heap.size > 1) {
-        HuffNode *l = heap_pop(&heap);
-        HuffNode *r = heap_pop(&heap);
-        HuffNode *parent = new_node(0, l->freq + r->freq);
-        parent->left = l; parent->right = r;
-        heap_push(&heap, parent);
-    }
-
-    HuffNode *root = heap_pop(&heap);
+    HuffNode *root = build_huffman_tree(&heap);
     FILE *fout = fopen("telemetry_restored.txt", "wb");
     if (!fout) { printf("[Error] Cannot create output\n"); free_tree(root); fclose(fin); return 0; }
 

@@ -9,7 +9,7 @@ Five C implementations covering core data structures and algorithms.
 **Compile:**
 ```
 cd q1
-make
+gcc incident_tracker.c -o incident_tracker -lpthread
 ```
 **Run:**
 ```
@@ -26,13 +26,13 @@ Stores up to 25 incidents. When full, the oldest is automatically dropped. Live 
 **Compile:**
 ```
 cd q2
-make
+gcc validator.c -o validator
 ```
 **Run:**
 ```
 ./validator
 ```
-Loads procedures from `procedures.txt` into a BST. Exact matches are approved. Close matches (Levenshtein distance ≤ 4) trigger a suggestion. Unknown entries are rejected and logged to `audit.log`.
+Loads procedures from `procedures.txt` into a BST. Exact matches are approved. Close matches (Levenshtein distance <= 4) trigger a suggestion. Unknown entries are rejected and logged to `audit.log`.
 
 ---
 
@@ -41,7 +41,7 @@ Loads procedures from `procedures.txt` into a BST. Exact matches are approved. C
 **Compile:**
 ```
 cd q3
-make
+gcc route_analyzer.c -o route_analyzer
 ```
 **Run:**
 ```
@@ -60,7 +60,7 @@ make
 **Compile:**
 ```
 cd q4
-make
+gcc robot_nav.c -o robot_nav
 ```
 **Run:**
 ```
@@ -75,7 +75,7 @@ Enter any campus building name and the program finds the shortest weighted path 
 **Compile:**
 ```
 cd q5
-make
+gcc huffman.c -o huffman
 ```
 **Run:**
 ```
@@ -88,9 +88,9 @@ Compresses the input file to `telemetry.huff`, then decompresses back to `teleme
 ## Project Structure
 
 ```
-q1/  incident_tracker.c  Makefile
-q2/  validator.c         Makefile  procedures.txt
-q3/  route_analyzer.c   Makefile
-q4/  robot_nav.c        Makefile
-q5/  huffman.c          Makefile  telemetry.txt
+q1/  incident_tracker.c
+q2/  validator.c         procedures.txt
+q3/  route_analyzer.c
+q4/  robot_nav.c
+q5/  huffman.c            telemetry.txt
 ```
